@@ -10,6 +10,7 @@ import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.api.java.function.FlatMapFunction;
 import org.apache.spark.api.java.function.Function2;
 import org.apache.spark.api.java.function.PairFunction;
+import org.apache.spark.api.java.function.VoidFunction;
 
 import scala.Tuple2;
 
@@ -52,7 +53,15 @@ public class WordCount {
 				return v1+v2;
 			}
 		});
-		result.saveAsTextFile("/user/java-spark-output");
+//		result.saveAsTextFile("/user/java-spark-output");
+		result.foreach(new VoidFunction<Tuple2<String,Integer>>() {
+			
+			@Override
+			public void call(Tuple2<String, Integer> t) throws Exception {
+				System.out.println(t._1+"--"+t._2);
+				
+			}
+		});
 		sc.stop();
 	}
 
